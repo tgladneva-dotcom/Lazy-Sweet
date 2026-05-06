@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mini Game WOW</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin:0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-align:center;
+  color:#333;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+header {
+  background: rgba(0,0,0,0.2);
+  color:white;
+  padding:15px;
+  font-size:20px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.stats-box {
+  background:white;
+  margin:10px;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.box {
+  background:white;
+  margin:10px;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+button {
+  margin:8px 5px;
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  background:#667eea;
+  color:white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+button:hover:not(:disabled) {
+  background: #764ba2;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button.danger {
+  background: #e74c3c;
+}
+
+button.danger:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+button.success {
+  background: #27ae60;
+}
+
+button.success:hover:not(:disabled) {
+  background: #229954;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 2px solid #667eea;
+  border-radius: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+img {
+  width:100%;
+  border-radius:12px;
+  margin: 10px 0;
+}
+
+.nav {
+  position:fixed;
+  bottom:0;
+  left: 0;
+  width:100%;
+  display:flex;
+  background: white;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  z-index: 200;
+  border-top: 1px solid #eee;
+}
+
+.nav button {
+  flex:1;
+  background:white;
+  color:#667eea;
+  margin: 0;
+  border-radius: 0;
+  padding: 12px 5px;
+  font-size: 20px;
+}
+
+.nav button.active {
+  background: #f0f0f0;
+  color: #667eea;
+}
+
+.locked-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.locked-icon {
+  font-size: 80px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.timer {
+  font-size: 48px;
+  font-weight: bold;
+  color: #667eea;
+  font-family: 'Courier New', monospace;
+}
+
+.timer-label {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+
+h2 {
+  color: #667eea;
+  margin-top: 0;
+}
+
+h3 {
+  color: #333;
+  margin: 10px 0;
+}
+
+h4 {
+  color: #667eea;
+  margin: 10px 0;
+}
+
+.shop-item {
+  display: inline-block;
+  width: calc(50% - 10px);
+  vertical-align: top;
+  margin: 5px;
+}
+
+.inventory-item {
+  background: #f0f0f0;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.question-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px 20px;
+  border-radius: 15px;
+  margin: 20px 10px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.question-text {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.hearts {
+  display: inline-block;
+  margin: 0 2px;
+  font-size: 20px;
+  animation: beat 0.6s;
+}
+
+.hearts.lost {
+  animation: shake 0.5s;
+  color: #e74c3c;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.rating {
+  font-size: 14px;
+  color: #999;
+  margin: 10px 0;
+}
+
+.leaderboard-row {
+  background: white;
+  padding: 12px;
+  margin: 8px 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.leaderboard-rank {
+  font-size: 20px;
+  font-weight: bold;
+  color: #667eea;
+  min-width: 30px;
+}
+
+.leaderboard-name {
+  flex: 1;
+  text-align: left;
+  margin: 0 10px;
+}
+
+.leaderboard-score {
+  font-weight: bold;
+  color: #667eea;
+  font-size: 18px;
+}
+
+.leaderboard-row.me {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border: 2px solid #667eea;
+}
+
+.purchase-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.heart-package {
+  background: white;
+  border: 2px solid #e74c3c;
+  border-radius: 10px;
+  padding: 15px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.heart-package h4 {
+  color: #e74c3c;
+  margin: 5px 0;
+}
+
+.heart-package p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.heart-count {
+  font-size: 24px;
+  margin: 5px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>🎮 WOW Mini Game</header>
+
+<div class="stats-box">
+  <div class="stat">
+    <div class="stat-label">👤 Имя</div>
+    <div class="stat-value" id="name">-</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">💰 Деньги</div>
+    <div class="stat-value" id="money">0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">💖 Сердца</div>
+    <div class="stat-value" id="hearts">0</div>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<div class="nav">
+  <button onclick="show('game')" class="nav-btn active" data-tab="game">🎮</button>
+  <button onclick="show('shop')" class="nav-btn" data-tab="shop">🛒</button>
+  <button onclick="show('profile')" class="nav-btn" data-tab="profile">👤</button>
+  <button onclick="show('top')" class="nav-btn" data-tab="top">🏆</button>
+</div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script>
+// ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM =====
+let tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+// ===== ДАННЫЕ =====
+let name = localStorage.getItem("name");
+let money = +localStorage.getItem("money") || 0;
+let hearts = +localStorage.getItem("hearts") || 5;
+let maxHearts = +localStorage.getItem("maxHearts") || 5;
+let lastPlayTime = +localStorage.getItem("lastPlayTime") || 0;
+let inventory = JSON.parse(localStorage.getItem("inv")||"[]");
+
+let questions = [
+ {q:"Столица Франции?",a:"Париж"},
+ {q:"Сколько планет?",a:"8"},
+ {q:"Цвет неба?",a:"синий"},
+ {q:"2+2?",a:"4"},
+ {q:"Животное говорит мяу?",a:"кот"},
+ {q:"Столица России?",a:"Москва"},
+ {q:"Сколько дней в неделе?",a:"7"},
+ {q:"Что быстрее: орел или заяц?",a:"орел"},
+ {q:"3+5?",a:"8"},
+ {q:"Какой самый большой океан?",a:"тихий"}
+];
+
+let current = null;
+let currentTab = 'game';
+
+// ===== ИМЯ =====
+if(!name){
+  document.getElementById("app").innerHTML=`
+    <div class="box" style="margin-top:50px;">
+      <h2>Добро пожаловать! 🎮</h2>
+      <p>Как тебя зовут?</p>
+      <input id="n" placeholder="Введи свое имя" autocomplete="off">
+      <button onclick="setName()">Начать игру</button>
+    </div>
+  `;
+}else {
+  start();
+}
+
+function setName(){
+  let n = document.getElementById("n").value.trim();
+  if(!n) {
+    alert("Введи имя!");
+    return;
+  }
+  name = n;
+  localStorage.setItem("name", name);
+  start();
+}
+
+function start(){
+  update();
+  show('game');
+}
+
+// ===== ОБНОВЛЕНИЕ =====
+function update(){
+  document.getElementById("name").innerText = name;
+  document.getElementById("money").innerText = money;
+  document.getElementById("hearts").innerText = hearts;
+
+  localStorage.setItem("money", money);
+  localStorage.setItem("hearts", hearts);
+  localStorage.setItem("inv", JSON.stringify(inventory));
+  localStorage.setItem("lastPlayTime", lastPlayTime);
+}
+
+// ===== ПРОВЕРКА БЛОКИРОВКИ =====
+function isGameLocked(){
+  return hearts <= 0;
+}
+
+function getTimeUntilReset(){
+  let now = Date.now();
+  let timePassed = now - lastPlayTime;
+  let timeUntilReset = 30 * 60 * 1000 - timePassed; // 30 минут
+  
+  if(timeUntilReset <= 0){
+    hearts = maxHearts;
+    lastPlayTime = 0;
+    update();
+    return 0;
+  }
+  return timeUntilReset;
+}
+
+function formatTime(ms){
+  let seconds = Math.floor((ms / 1000) % 60);
+  let minutes = Math.floor((ms / (1000 * 60)) % 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
+// ===== ИГРА =====
+function showGame(){
+  if(isGameLocked()){
+    let timeLeft = getTimeUntilReset();
+    
+    let html = `
+      <div class="box locked-screen">
+        <div class="locked-icon">🔒</div>
+        <h3>Сердца закончились!</h3>
+        <p>Жди перезагрузки или купи сердца</p>
+        
+        <div class="timer" id="timer">${formatTime(timeLeft)}</div>
+        <div class="timer-label">Времени до восстановления</div>
+        
+        <div class="purchase-options">
+          <div class="heart-package">
+            <h4>❤️ +5 сердец</h4>
+            <div class="heart-count">+5</div>
+            <p>💰 50</p>
+            <button onclick="buyHearts(5, 50)" ${money < 50 ? 'disabled' : ''} class="success">
+              Купить
+            </button>
+          </div>
+          <div class="heart-package">
+            <h4>❤️ +10 сердец</h4>
+            <div class="heart-count">+10</div>
+            <p>💰 80</p>
+            <button onclick="buyHearts(10, 80)" ${money < 80 ? 'disabled' : ''} class="success">
+              Купить
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById("app").innerHTML = html;
+    
+    if(timeLeft > 0){
+      let timerInterval = setInterval(() => {
+        let timeLeft = getTimeUntilReset();
+        if(timeLeft <= 0){
+          clearInterval(timerInterval);
+          showGame();
+        } else {
+          let timerEl = document.getElementById("timer");
+          if(timerEl) timerEl.innerText = formatTime(timeLeft);
+        }
+      }, 1000);
+    }
+  } else {
+    current = questions[Math.floor(Math.random() * questions.length)];
+
+    document.getElementById("app").innerHTML = `
+      <div class="box">
+        <div class="question-box">
+          <div class="question-text">${current.q}</div>
+        </div>
+        
+        <div style="margin: 20px 0;">
+          Осталось попыток: <span id="heartsDisplay">${hearts}</span>
+        </div>
+        
+        <input id="ans" placeholder="Твой ответ" autocomplete="off" autofocus>
+        <button onclick="check()" class="success" style="width: 100%;">✓ Ответить</button>
+      </div>
+    `;
+    
+    document.getElementById("ans").addEventListener("keypress", (e) => {
+      if(e.key === "Enter") check();
+    });
+  }
+}
+
+function check(){
+  let a = document.getElementById("ans").value.trim();
+
+  if(!a){
+    alert("Введи ответ!");
+    return;
+  }
+
+  lastPlayTime = Date.now();
+
+  if(a.toLowerCase() == current.a.toLowerCase()){
+    money += 3;
+    let appEl = document.getElementById("app");
+    appEl.innerHTML = `
+      <div class="box">
+        <div style="font-size: 60px; animation: beat 0.6s;">✅</div>
+        <h3>Правильно! +3 💰</h3>
+      </div>
+    `;
+  } else {
+    hearts--;
+    let appEl = document.getElementById("app");
+    appEl.innerHTML = `
+      <div class="box">
+        <div style="font-size: 60px; animation: shake 0.5s;">❌</div>
+        <h3>Неправильно! -1 ❤️</h3>
+      </div>
+    `;
+  }
+
+  update();
+  setTimeout(() => {
+    showGame();
+  }, 1500);
+}
+
+function buyHearts(amount, price){
+  if(money >= price){
+    money -= price;
+    hearts = Math.min(hearts + amount, maxHearts + amount);
+    lastPlayTime = 0;
+    update();
+    showGame();
+  } else {
+    alert("Недостаточно денег!");
+  }
+}
+
+// ===== МАГАЗИН =====
+let shopItems = [
+  {
+    name: "❤️ +5 Сердец",
+    price: 50,
+    img: "🎁",
+    type: "hearts",
+    value: 5
+  },
+  {
+    name: "❤️ +10 Сердец",
+    price: 80,
+    img: "🎁",
+    type: "hearts",
+    value: 10
+  },
+  {
+    name: "🐱 Скин Котик",
+    price: 20,
+    img: "🐱",
+    type: "skin"
+  },
+  {
+    name: "⭐ Скин Звезда",
+    price: 30,
+    img: "⭐",
+    type: "skin"
+  },
+  {
+    name: "🎀 Скин Подарок",
+    price: 25,
+    img: "🎀",
+    type: "skin"
+  },
+  {
+    name: "🔥 Скин Огонь",
+    price: 40,
+    img: "🔥",
+    type: "skin"
+  }
+];
+
+function showShop(){
+  let html = "<h2>🛒 Магазин</h2>";
+
+  shopItems.forEach((it, i) => {
+    let disabled = money < it.price;
+    html += `
+      <div class="box">
+        <div style="font-size: 40px;">${it.img}</div>
+        <h4>${it.name}</h4>
+        <p style="font-size: 18px; color: #667eea;">💰 ${it.price}</p>
+        <button onclick="buy(${i})"
+        ${disabled ? 'disabled' : ''} class="success">
+        ${disabled ? 'Недостаточно денег' : 'Купить'}
+        </button>
+      </div>
+    `;
+  });
+
+  document.getElementById("app").innerHTML = html;
+}
+
+function buy(i){
+  let it = shopItems[i];
+
+  if(money >= it.price){
+    money -= it.price;
+    
+    if(it.type === "hearts"){
+      hearts = Math.min(hearts + it.value, maxHearts + it.value);
+      lastPlayTime = 0;
+    } else {
+      inventory.push(it.name);
+    }
+    
+    update();
+    
+    let appEl = document.getElementById("app");
+    appEl.innerHTML = `
+      <div class="box" style="margin-top: 50px;">
+        <div style="font-size: 80px; animation: beat 0.6s;">✅</div>
+        <h3>Покупка успешна!</h3>
+        <p>${it.name}</p>
+      </div>
+    `;
+    
+    setTimeout(() => {
+      showShop();
+    }, 1500);
+  }
+}
+
+// ===== ПРОФИЛЬ =====
+function showProfile(){
+  let html = `
+    <h2>👤 Профиль</h2>
+    
+    <div class="box">
+      <h3>${name}</h3>
+      <div class="rating">
+        Деньги: <strong>${money} 💰</strong><br>
+        Сердца: <strong>${hearts} ❤️</strong>
+      </div>
+    </div>
+  `;
+
+  html += "<div class='box'><h3>🎒 Инвентарь</h3>";
+
+  if(inventory.length === 0){
+    html += "<p style='color: #999;'>Пусто. Купи что-нибудь в магазине! 🛒</p>";
+  } else {
+    inventory.forEach(i => {
+      html += `<div class="inventory-item">✓ ${i}</div>`;
+    });
+  }
+
+  html += "</div>";
+
+  document.getElementById("app").innerHTML = html;
+}
+
+// ===== ��ИДЕРБОРД =====
+function showTop(){
+  let top = JSON.parse(localStorage.getItem("top") || "[]");
+
+  let me = top.find(x => x.name === name);
+  if(!me) top.push({name, score: money});
+  else me.score = money;
+
+  localStorage.setItem("top", JSON.stringify(top));
+
+  top.sort((a, b) => b.score - a.score);
+
+  let html = "<h2>🏆 Лидерборд</h2>";
+
+  top.forEach((u, idx) => {
+    let medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `${idx + 1}.`;
+    let isMe = u.name === name;
+    
+    html += `
+      <div class="leaderboard-row ${isMe ? 'me' : ''}">
+        <div class="leaderboard-rank">${medal}</div>
+        <div class="leaderboard-name">${u.name}${isMe ? ' (ты)' : ''}</div>
+        <div class="leaderboard-score">${u.score}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById("app").innerHTML = html;
+}
+
+// ===== НАВИГАЦИЯ =====
+function show(tab){
+  currentTab = tab;
+  
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
+  
+  if(tab == "game") showGame();
+  else if(tab == "shop") showShop();
+  else if(tab == "profile") showProfile();
+  else if(tab == "top") showTop();
+}
+
+// Автоматическое восстановление сердец
+setInterval(() => {
+  if(isGameLocked()){
+    let timeLeft = getTimeUntilReset();
+    if(timeLeft <= 0 && currentTab === 'game'){
+      showGame();
+    }
+  }
+}, 1000);
+</script>
+
+</body>
+</html>
