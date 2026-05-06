@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazy Sweet - Мои Проекты</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* НАВИГАЦИЯ */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #667eea;
+}
+
+/* ГЕРОЙ */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: float 20s infinite linear;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: slideDown 0.8s ease-out;
+  font-weight: 900;
+}
+
+.hero p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  animation: slideUp 0.8s ease-out 0.2s both;
+}
+
+.cta-button {
+  display: inline-block;
+  background: white;
+  color: #667eea;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  animation: slideUp 0.8s ease-out 0.4s both;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* СЕКЦИЯ ПРОЕКТОВ */
+.projects {
+  padding: 5rem 2rem;
+  background: white;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.project-image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
+
+.project-content {
+  padding: 2rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.project-desc {
+  color: #666;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tech-tag {
+  background: #f0f0f0;
+  color: #667eea;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.project-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.project-btn {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+  background: #f8f8f8;
+}
+
+/* СЕКЦИЯ СТАТИСТИКИ */
+.stats {
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stat-item h3 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* СЕКЦИЯ О МНЕ */
+.about {
+  padding: 5rem 2rem;
+  background: white;
+  text-align: center;
+}
+
+.about-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* ФУТЕР */
+footer {
+  background: #222;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.social-links a {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  background: #667eea;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.social-links a:hover {
+  transform: scale(1.1);
+  background: #764ba2;
+}
+
+/* АДАПТИВ */
+@media (max-width: 768px) {
+  nav ul {
+    gap: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* АНИМАЦИЯ ЗАГРУЗКИ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+body {
+  animation: fadeIn 0.5s ease-in;
+}
+</style>
+</head>
+<body>
+
+<!-- НАВИГАЦИЯ -->
+<nav>
+  <div class="logo">🎀 Lazy Sweet</div>
+  <ul>
+    <li><a href="#projects">Проекты</a></li>
+    <li><a href="#about">Обо мне</a></li>
+    <li><a href="#contacts">Контакты</a></li>
+  </ul>
+</nav>
+
+<!-- ГЕРОЙ -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>Lazy Sweet 🍬</h1>
+    <p>Мои интерактивные проекты и веб-приложения</p>
+    <a href="#projects" class="cta-button">Посмотреть проекты ✨</a>
+  </div>
+</div>
+
+<!-- ПРОЕКТЫ -->
+<section class="projects" id="projects">
+  <h2 class="section-title">Мои Проекты</h2>
+  
+  <div class="projects-grid">
+    <!-- Проект 1: Art Shop -->
+    <div class="project-card">
+      <div class="project-image">🎨</div>
+      <div class="project-content">
+        <h3 class="project-title">Not Sweet - Art Shop</h3>
+        <p class="project-desc">Красивая галерея цифрового искусства с системой покупок. Пользователи могут просматривать, покупать и собирать уникальные арты!</p>
+        <div class="project-tech">
+          <span class="tech-tag">HTML5</span>
+          <span class="tech-tag">CSS3</span>
+          <span class="tech-tag">JavaScript</span>
+        </div>
+        <div class="project-buttons">
+          <a href="not-sweet.html" class="project-btn btn-primary">🚀 Открыть</a>
+          <a href="https://github.com/tgladneva-dotcom/Lazy-Sweet" class="project-btn btn-secondary">📄 GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Проект 2: Mini Game -->
+    <div class="project-card">
+      <div class="project-image">🎮</div>
+      <div class="project-content">
+        <h3 class="project-title">WOW Mini Game</h3>
+        <p class="project-desc">Интерактивная игра с вопросами, системой сердец, магазином и лидербордом. Полная интеграция с Telegram Web App!</p>
+        <div class="project-tech">
+          <span class="tech-tag">Telegram Bot</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">Web App</span>
+        </div>
+        <div class="project-buttons">
+          <a href="mini-game.html" class="project-btn btn-primary">🎯 Играть</a>
+          <a href="https://github.com/tgladneva-dotcom/Lazy-Sweet" class="project-btn btn-secondary">📄 GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Проект 3: API Server -->
+    <div class="project-card">
+      <div class="project-image">⚙️</div>
+      <div class="project-content">
+        <h3 class="project-title">Game API Server</h3>
+        <p class="project-desc">Express.js сервер для управления пользователями, деньгами, сердцами и лидербордом. RESTful API с поддержкой CORS.</p>
+        <div class="project-tech">
+          <span class="tech-tag">Express.js</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">REST API</span>
+        </div>
+        <div class="project-buttons">
+          <a href="https://github.com/tgladneva-dotcom/Lazy-Sweet" class="project-btn btn-primary">💻 Код</a>
+          <a href="#" class="project-btn btn-secondary">📚 Docs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- СТАТИСТИКА -->
+<section class="stats">
+  <h2 class="section-title" style="color: white;">Статистика</h2>
+  <div class="stats-grid">
+    <div class="stat-item">
+      <h3>3+</h3>
+      <p>Проектов создано</p>
+    </div>
+    <div class="stat-item">
+      <h3>100%</h3>
+      <p>Качество кода</p>
+    </div>
+    <div class="stat-item">
+      <h3>🚀</h3>
+      <p>В разработке</p>
+    </div>
+  </div>
+</section>
+
+<!-- ОБО МНЕ -->
+<section class="about" id="about">
+  <h2 class="section-title">Обо мне</h2>
+  <div class="about-content">
+    <p>👋 Привет! Я разработчик, создающий интерактивные веб-приложения и Telegram боты.</p>
+    <p>🎨 Мои проекты сочетают красивый дизайн с мощной функциональностью. Люблю создавать приложения, которые приносят радость!</p>
+    <p>💫 Я постоянно учусь и совершенствую свои навыки в веб-разработке.</p>
+  </div>
+</section>
+
+<!-- ФУТЕР -->
+<footer id="contacts">
+  <h3>Свяжись со мной 💌</h3>
+  <div class="social-links">
+    <a href="https://t.me/Iris10GI" title="Telegram">✈️</a>
+    <a href="https://github.com/tgladneva-dotcom" title="GitHub">🐙</a>
+    <a href="mailto:tgladneva@gmail.com" title="Email">📧</a>
+  </div>
+  <p>&copy; 2026 Lazy Sweet. Все права защищены 🍬</p>
+</footer>
+
+</body>
+</html>
